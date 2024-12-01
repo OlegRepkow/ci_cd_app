@@ -23,40 +23,12 @@ jobs:
   #       env:
   #         super_secrets: ${{ secrets.CI_CD_SECRET }}
   #       run: echo "The secret is ${super_secrets}"
-  workspace-commands:
+  format:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # Step 2: Display the current directory to verify we're in the workspace
-      - name: Show current directory
-        run: |
-          echo "Current directory is: $(pwd)"
-          ls ${{ github.workspace }}  # List files in the workspace
-
-      # Step 3: Display the last Git commit
-      - name: Show last Git commit
-        run: |
-          git log -n 1 --oneline  # Show the last commit
-
-      # Step 4: Display the current branch name
-      - name: Show current Git branch
-        run: |
-          git branch --show-current  # Show the current branch name
-
-      # Step 5: Display the status of the Git repository
-      - name: Show Git status
-        run: |
-          git status  # Show the status of the repository (modified files, etc.)
-
-      # Step 6: List all files tracked by Git in the repository
-      - name: List Git-tracked files
-        run: |
-          git ls-files  # List all files tracked by Git
-
-      # Step 7: Find specific files (example: finding all .md files)
-      - name: Find markdown files
-        run: |
-          find ${{ github.workspace }} -name "*.md"
+      - name: Set up Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: format
+        run: dart format .
