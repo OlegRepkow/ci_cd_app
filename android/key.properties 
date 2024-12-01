@@ -1,0 +1,5 @@
+storeFile=/Users/centr/PDP CICD/pdp_ci_cd_app/android/app/pdp-ci-cd-release-key.jks
+storePassword=18021963
+keyAlias=my-key-alias
+keyPassword=18021963
+/Users/centr/PDP CICD/pdp_ci_cd_app
