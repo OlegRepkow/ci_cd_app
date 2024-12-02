@@ -25,6 +25,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+   
+      - name: Decode Keystore from Base64
+        run: echo "${{ secrets.KESTORE_FILE }}" | base64 --decode > pdp-ci-cd-release-key.jks
+        env:
+          KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.3"
 
       - name: Verify Flutter Installation
         run: flutter doctor -v
@@ -44,11 +54,6 @@ jobs:
           echo "Updated version to $NEW_VERSION_NAME+$NEW_VERSION_CODE"
           echo "version=$NEW_VERSION_NAME+$NEW_VERSION_CODE" >> $GITHUB_OUTPUT
 
-      - name: Decode Keystore from Base64
-        run: |
-         echo "$KEYSTORE_FILE" | base64 -d > $GITHUB_WORKSPACE/pdp-ci-cd-release-key.jks
-        env:
-          KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
       - name: Build APK
         run: flutter build apk --release
         env:
@@ -78,4 +83,4 @@ jobs:
       #     --release-notes "test_build" \
       #     --groups my_team
 
- 
+      
