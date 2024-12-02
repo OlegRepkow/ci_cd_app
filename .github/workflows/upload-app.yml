@@ -1,10 +1,21 @@
 name: Distribute APK to Firebase
 
 on:
-  # push:
-  #   branches:
-  #     - main
   workflow_dispatch:
+    inputs:
+      logLevel:
+        description: "Log level"
+        required: true
+        default: "warning"
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
+      tags:
+        description: "Test scenario tags"
+        required: false
+        type: boolean
 
 jobs:
   distribute-apk:
@@ -44,7 +55,8 @@ jobs:
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.APPID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
+          # token: ${{ secrets.FIREBASE_TOKEN }}
+          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
           groups: my_team
           file: build/app/outputs/flutter-apk/app-debug.apk
           releaseNotes: "Release for branch ${{ github.ref }}\nVersion: ${{ steps.bump-version.outputs.version }}"
