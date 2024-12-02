@@ -5,8 +5,14 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
-    namespace = "com.example.pdp_ci_cd_app"
+    namespace = "com.example.pdp_ci_cd_appv"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -31,10 +37,10 @@ android {
     }
  signingConfigs {
         release {
-            storeFile file("pdp-ci-cd-release-key.jks")
-            storePassword "18021963"
-            keyAlias "my-key-alias"
-            keyPassword "18021963"
+            keyAlias keystoreProperties['keyAliasRelease']
+            keyPassword keystoreProperties['keyPasswordRelease']
+            storeFile file(keystoreProperties['storeFileRelease'])
+            storePassword keystoreProperties['storePasswordRelease']
         }
     }
     buildTypes {
