@@ -25,26 +25,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Encode Keystore to Base64
-        run: |
-          base64 -w 0 $GITHUB_WORKSPACE/pdp-ci-cd-release-key.jks > keystore.b64
-          echo "::set-output name=keystore_base64::$(cat keystore.b64)"
-
-      - name: Save Keystore as GitHub Secret
-        run: |
-          echo "${{ steps.encode_keystore.outputs.keystore_base64 }}" > $GITHUB_WORKSPACE/keystore.b64
-        id: encode_keystore
-
-      - name: Decode Keystore from Base64
-        run: |
-          echo "$KESTORE_FILE" | base64 -d > $GITHUB_WORKSPACE/pdp-ci-cd-release-key.jks
-        env:
-          KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.24.3"
 
       - name: Verify Flutter Installation
         run: flutter doctor -v
@@ -64,6 +44,11 @@ jobs:
           echo "Updated version to $NEW_VERSION_NAME+$NEW_VERSION_CODE"
           echo "version=$NEW_VERSION_NAME+$NEW_VERSION_CODE" >> $GITHUB_OUTPUT
 
+      - name: Decode Keystore from Base64
+        run: |
+         echo "$KEYSTORE_FILE" | base64 -d > $GITHUB_WORKSPACE/pdp-ci-cd-release-key.jks
+        env:
+          KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
       - name: Build APK
         run: flutter build apk --release
         env:
@@ -92,3 +77,5 @@ jobs:
       #     --app 1:981212150058:android:d7a644e30d78b0982ac653 \
       #     --release-notes "test_build" \
       #     --groups my_team
+
+ 
