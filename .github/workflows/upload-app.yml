@@ -12,7 +12,7 @@ on:
           - distribute-apk
 
 jobs:
-  distribute-ipa:
+  build-ios-ipa:
     if: ${{ github.event.inputs.choice == 'distribute-ipa' }}
     runs-on: macos-latest
     steps:
@@ -51,16 +51,14 @@ jobs:
       - name: Building IPA
         run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
 
-      # Collect the file and upload as artifact
       - name: collect ipa artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-ipa
-          # Path to the release files
           path: build/ios/ipa/*.ipa
-  release:
+  release-ios:
     name: Release ipa to Firebase
-    needs: distribute-ipa
+    needs: build-ios-ipa
     runs-on: ubuntu-latest
     steps:
     
@@ -78,7 +76,7 @@ jobs:
         groups: my_team
         file: pdp_ci_cd_app.ipa
      
-  distribute-apk:
+  build-android-apk:
     if: ${{ github.event.inputs.choice == 'distribute-apk' }}
     runs-on: ubuntu-latest
     steps:
@@ -122,7 +120,11 @@ jobs:
 
       - name: Build APK
         run: flutter build apk --release
-
+  release-android:
+    name: Release apk to Firebase
+    runs-on: ubuntu-latest
+    needs:  build-android-apk
+    steps:
       - name: Upload Artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
