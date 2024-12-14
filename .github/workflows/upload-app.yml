@@ -14,19 +14,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-
       - name: Decode Keystore from Base64
-        run: | 
-             echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > android/app/${{ secrets.KESTORE_FILE_PATH }}
-  
-      - name: Create keystore.properties file
         run: |
-            echo "keyAliasRelease=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
-            echo "keyPasswordRelease=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
-            echo "storeFileRelease=${{ secrets.KESTORE_FILE_PATH }}" >> android/key.properties
-            echo "storePasswordRelease=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties    
-            cat android/key.properties
-            echo android/key.properties
+          echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > android/app/${{ secrets.KESTORE_FILE_PATH }}
+
+      - name: Create keystore
+        run: |
+          echo "keyAliasRelease=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+          echo "keyPasswordRelease=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+          echo "storeFileRelease=${{ secrets.KESTORE_FILE_PATH }}" >> android/key.properties
+          echo "storePasswordRelease=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+        # cat android/key.properties
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -53,7 +51,6 @@ jobs:
 
       - name: Build APK
         run: flutter build apk --release
-  
 
       - name: Upload Artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -76,5 +73,3 @@ jobs:
       #     --app 1:981212150058:android:d7a644e30d78b0982ac653 \
       #     --release-notes "test_build" \
       #     --groups my_team
-
-      
