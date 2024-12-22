@@ -11,10 +11,10 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.pdp.repkow</key>
-		<string>pdpRepkow</string>
+		<string>ProvisioningProfileRepkow</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>21A30F45600B7ED0424B1082366FEDBE8658ABF8</string>
+	<string>7B537DBEAC0209D428A299616E190F29F871D60A</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>stripSwiftSymbols</key>
